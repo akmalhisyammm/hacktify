@@ -1,6 +1,6 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
 
-import { BaseLayout } from '../components/templates';
+import { AuthLayout, BaseLayout } from '../components/templates';
 import LoginPage from '../views/LoginPage';
 import RegisterPage from '../views/RegisterPage';
 import HomePage from '../views/HomePage';
@@ -19,6 +19,7 @@ const router = createBrowserRouter([
     },
   },
   {
+    element: <AuthLayout />,
     loader: () => (localStorage.getItem('default_access_token') ? redirect('/') : null),
     children: [
       {

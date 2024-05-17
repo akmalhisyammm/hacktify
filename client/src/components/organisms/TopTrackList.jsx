@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-import { API_URL } from '../../constants/url';
+import { Heading } from '../atoms';
 import { TopTrackItem } from '../molecules';
+import { API_URL } from '../../constants/url';
 
 const TopTrackList = () => {
   const [topTracks, setTopTracks] = useState([]);
@@ -29,11 +30,7 @@ const TopTrackList = () => {
 
   return (
     <section className="flex flex-col gap-4 my-4">
-      <div className="text-3xl font-bold">
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-violet-500">
-          My Top Tracks
-        </span>
-      </div>
+      <Heading>My Top Tracks</Heading>
       <article className="grid grid-cols-1 gap-0 md:gap-4 md:grid-cols-2">
         {topTracks.map((track, index) => (
           <TopTrackItem key={track.id} track={track} index={index} />

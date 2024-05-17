@@ -6,6 +6,12 @@ class FavoriteController {
       const { name, artist } = req.body;
       const { id: UserId } = req.user;
 
+      const isExists = await Favorite.findOne({ where: { name, artist, UserId } });
+
+      if (isExists) {
+        return next({ status: 400, message: 'Favorite already exists' });
+      }
+
       const favorite = await Favorite.create({ name, artist, UserId });
 
       res.status(201).json(favorite);

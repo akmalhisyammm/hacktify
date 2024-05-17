@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
+import { Heading } from '../atoms';
 import { API_URL } from '../../constants/url';
 import { fetchUser } from '../../features/user/userSlice';
-import { toast } from 'react-toastify';
 
 const UserProfile = () => {
   const { user, loading, error } = useSelector((state) => state.user);
@@ -31,11 +32,7 @@ const UserProfile = () => {
 
   return (
     <section className="flex flex-col gap-4 my-4">
-      <div className="text-3xl font-bold">
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-violet-500">
-          Profile
-        </span>
-      </div>
+      <Heading>My Profile</Heading>
       {error ? (
         <div role="alert" className="alert alert-error">
           <svg

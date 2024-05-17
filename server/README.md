@@ -16,22 +16,22 @@ List of available endpoints:
 
 ### Favorite
 
-- `GET /favorites` (authentication)
-- `POST /favorites` (authentication)
-- `DELETE /favorites/:id` (authentication)
+- `GET /favorites` (default authentication)
+- `POST /favorites` (default authentication)
+- `DELETE /favorites/:id` (default authentication)
 
 ### Track
 
-- `GET /tracks/generate` (authentication)
-- `GET /tracks/search` (authentication)
+- `GET /tracks/generate` (default authentication)
+- `GET /tracks/search` (spotify authentication)
 
 ### User
 
-- `GET /users/me` (authentication)
-- `PUT /users/me` (authentication)
-- `GET /users/top/tracks` (authentication)
-- `GET /users/top/artists` (authentication)
-- `GET /users/moods/detect` (authentication)
+- `GET /users/me` (default authentication)
+- `PUT /users/me` (default authentication)
+- `GET /users/top/tracks` (spotify authentication)
+- `GET /users/top/artists` (spotify authentication)
+- `GET /users/moods/detect` (spotify authentication)
 
 ## Global Responses
 
@@ -91,7 +91,7 @@ OR
 
 ```json
 {
-  "authorization": "Bearer <token>"
+  "authorization": "Bearer <default_token>"
 }
 ```
 
@@ -149,7 +149,7 @@ OR
 
 ```json
 {
-  "access_token": "<token>"
+  "access_token": "<default_token>"
 }
 ```
 
@@ -177,7 +177,35 @@ OR
 
 ```json
 {
-  "access_token": "<token>"
+  "access_token": "<default_token>"
+}
+```
+
+## GET /auth/spotify
+
+### Response (Redirect)
+
+To: https://accounts.spotify.com/authorize
+
+## GET /auth/spotify/callback
+
+### Request
+
+- Query
+
+```json
+{
+  "code": "<spotify_code>",
+  "state": "<random_string>"
+}
+```
+
+### Response (200 - OK)
+
+```json
+{
+  "access_token": "<spotify_token>",
+  "refresh_token": "<spotify_refresh_token>"
 }
 ```
 
@@ -189,7 +217,7 @@ OR
 
 ```json
 {
-  "authorization": "Bearer <token>"
+  "authorization": "Bearer <default_token>"
 }
 ```
 
@@ -218,7 +246,7 @@ OR
 
 ```json
 {
-  "authorization": "Bearer <token>"
+  "authorization": "Bearer <default_token>"
 }
 ```
 
@@ -260,7 +288,7 @@ OR
 
 ```json
 {
-  "authorization": "Bearer <token>"
+  "authorization": "Bearer <default_token>"
 }
 ```
 
@@ -280,6 +308,77 @@ OR
 }
 ```
 
+## GET /tracks/generate
+
+### Request
+
+- Headers
+
+```json
+{
+  "authorization": "Bearer <default_token>"
+}
+```
+
+- Query
+
+```json
+{
+  "q": "best k-pop songs"
+}
+```
+
+### Response (200 - OK)
+
+```json
+{
+  "tracks": [
+    {
+      "name": "I AM",
+      "artist": "IVE"
+    },
+    {
+      "name": "Kitsch",
+      "artist": "IVE"
+    },
+    {
+      "name": "Violeta",
+      "artist": "IZ*ONE"
+    }
+  ]
+}
+```
+
+## GET /tracks/search
+
+### Request
+
+- Headers
+
+```json
+{
+  "authorization": "Bearer <spotify_token>"
+}
+```
+
+- Query
+
+```json
+{
+  "q": "I AM - IVE"
+}
+```
+
+### Response (200 - OK)
+
+```json
+{
+  "id": "<spotify_id>",
+  "name": "I AM",
+  ...
+}
+```
+
 ## GET /users/me
 
 ### Request
@@ -288,7 +387,7 @@ OR
 
 ```json
 {
-  "authorization": "Bearer <token>"
+  "authorization": "Bearer <default_token>"
 }
 ```
 
@@ -321,7 +420,7 @@ OR
 
 ```json
 {
-  "authorization": "Bearer <token>"
+  "authorization": "Bearer <default_token>"
 }
 ```
 
@@ -377,8 +476,54 @@ OR
 [
   {
     "id": "<spotify_id>",
+    "name": "I AM",
+    ...
+  }
+]
+```
+
+## GET /users/top/artists
+
+### Request
+
+- Headers
+
+```json
+{
+  "authorization": "Bearer <spotify_token>"
+}
+```
+
+### Response (200 - OK)
+
+```json
+[
+  {
+    "id": "<spotify_id>",
     "name": "IVE",
     ...
   }
 ]
 ```
+
+## GET /users/moods/detect
+
+### Request
+
+- Headers
+
+```json
+{
+  "authorization": "Bearer <spotify_token>"
+}
+```
+
+### Response (200 - OK)
+
+```json
+{
+  "moods": ["energetic", "dreamy", "upbeat"]
+}
+```
+
+a5071ae5ef37a8ac

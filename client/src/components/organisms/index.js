@@ -1,6 +1,10 @@
 export { default as Header } from './Header';
-export { default as SpotifyPlayer } from './SpotifyPlayer';
+export { default as LoginForm } from './LoginForm';
+export { default as RegisterForm } from './RegisterForm';
+export { default as TracksGenerator } from './TracksGenerator';
+export { default as FavoriteList } from './FavoriteList';
 export { default as TopTrackList } from './TopTrackList';
-export { default as UserMoods } from './UserMoods';
+export { default as MoodsGenerator } from './MoodsGenerator';
 export { default as UserProfile } from './UserProfile';
+export { default as EditProfileForm } from './EditProfileForm';
 export { default as Footer } from './Footer';

@@ -12,7 +12,8 @@ const Header = () => {
     <header>
       <nav className="max-w-screen-xl px-4 mx-auto navbar">
         <div className="navbar-start">
-          <Link to="/" className="text-xl btn btn-ghost">
+          <Link to="/" className="text-xl font-bold btn btn-ghost">
+            <img src="/hacktify.png" alt="Hacktify" width={30} />
             Hacktify
           </Link>
         </div>

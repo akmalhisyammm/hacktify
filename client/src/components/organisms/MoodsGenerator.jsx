@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
+import { Heading } from '../atoms';
 import { API_URL } from '../../constants/url';
 
-const UserMoods = () => {
+const MoodsGenerator = () => {
   const [generatedMoods, setGeneratedMoods] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,11 +31,7 @@ const UserMoods = () => {
 
   return (
     <section className="flex flex-col gap-4 my-8">
-      <div className="text-3xl font-bold">
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-violet-500">
-          Your Moods
-        </span>
-      </div>
+      <Heading>Your Moods</Heading>
       {isLoading ? (
         <div>
           <img src="/pikachu-loading.gif" alt="Pikachu loading" width={120} className="mx-auto" />
@@ -57,4 +54,4 @@ const UserMoods = () => {
   );
 };
 
-export default UserMoods;
+export default MoodsGenerator;
