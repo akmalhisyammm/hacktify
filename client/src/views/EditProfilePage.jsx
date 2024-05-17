@@ -31,7 +31,7 @@ const EditProfilePage = () => {
       toast.success('Successfully updated profile', { position: 'bottom-center' });
       navigate('/profile');
     } catch (error) {
-      toast.error('Failed to update profile', { position: 'bottom-center' });
+      toast.error(error.response.data.message, { position: 'bottom-center' });
     }
   };
 

@@ -23,7 +23,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     if (error) {
-      toast.error('Failed to load favorites. Please try again later.', {
+      toast.error(error.response.data.message, {
         position: 'bottom-center',
       });
     }
@@ -56,7 +56,7 @@ const UserProfile = () => {
       ) : loading ? (
         <div>
           <img src="/pikachu-loading.gif" alt="Pikachu loading" width={120} className="mx-auto" />
-          <p className="font-bold text-center animate-pulse">Loading favorites...</p>
+          <p className="font-bold text-center animate-pulse">Loading profile...</p>
         </div>
       ) : (
         <div className="flex flex-col gap-4">

@@ -42,7 +42,7 @@ export const fetchUser = () => async (dispatch) => {
 
     dispatch(fetchUserSuccess(response.data));
   } catch (error) {
-    dispatch(fetchUserFailure(error.toString()));
+    dispatch(fetchUserFailure(error));
   }
 };
 

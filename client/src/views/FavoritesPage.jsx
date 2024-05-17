@@ -27,7 +27,7 @@ const FavoritesPage = () => {
       );
       setSearchedTrack({ ...response.data, index });
     } catch (error) {
-      toast.error('Failed to search track', { position: 'bottom-center' });
+      toast.error(error.response.data.message, { position: 'bottom-center' });
     }
   };
 
@@ -40,7 +40,7 @@ const FavoritesPage = () => {
       });
       dispatch(fetchFavorites());
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message, { position: 'bottom-center' });
     }
   };
 
@@ -50,9 +50,7 @@ const FavoritesPage = () => {
 
   useEffect(() => {
     if (error) {
-      toast.error('Failed to load favorites. Please try again later.', {
-        position: 'bottom-center',
-      });
+      toast.error(error.response.data.message, { position: 'bottom-center' });
     }
   }, [error]);
 

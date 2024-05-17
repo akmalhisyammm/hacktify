@@ -26,7 +26,7 @@ const LoginPage = () => {
       toast.success('Successfully logged in', { position: 'bottom-center' });
       navigate('/');
     } catch (error) {
-      toast.error('Failed to login', { position: 'bottom-center' });
+      toast.error(error.response.data.message, { position: 'bottom-center' });
     }
   };
 
@@ -40,7 +40,7 @@ const LoginPage = () => {
       toast.success('Successfully logged in', { position: 'bottom-center' });
       navigate('/');
     } catch (error) {
-      toast.error('Failed to login', { position: 'bottom-center' });
+      toast.error(error.response.data.message, { position: 'bottom-center' });
     }
   };
 

@@ -22,7 +22,7 @@ const UserMoods = () => {
       toast.success('Successfully generated moods', { position: 'bottom-center' });
       setGeneratedMoods(response.data.moods);
     } catch (error) {
-      toast.error('Failed to generate moods', { position: 'bottom-center' });
+      toast.error(error.response.data.message, { position: 'bottom-center' });
     } finally {
       setIsLoading(false);
     }

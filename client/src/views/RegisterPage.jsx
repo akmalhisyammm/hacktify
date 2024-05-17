@@ -26,7 +26,7 @@ const RegisterPage = () => {
       toast.success('Successfully registered', { position: 'bottom-center' });
       navigate('/login');
     } catch (error) {
-      toast.error('Failed to register', { position: 'bottom-center' });
+      toast.error(error.response.data.message, { position: 'bottom-center' });
     }
   };
 

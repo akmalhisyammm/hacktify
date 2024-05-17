@@ -43,7 +43,7 @@ export const fetchFavorites = () => async (dispatch) => {
 
     dispatch(fetchFavoritesSuccess(response.data));
   } catch (error) {
-    dispatch(fetchFavoritesFailure(error.toString()));
+    dispatch(fetchFavoritesFailure(error));
   }
 };
 

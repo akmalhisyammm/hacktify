@@ -27,7 +27,7 @@ const HomePage = () => {
       toast.success('Successfully generated tracks', { position: 'bottom-center' });
       setGeneratedTracks(response.data.tracks);
     } catch (error) {
-      toast.error('Failed to generate tracks', { position: 'bottom-center' });
+      toast.error(error.response.data.message, { position: 'bottom-center' });
     } finally {
       setIsLoading(false);
     }
@@ -45,7 +45,7 @@ const HomePage = () => {
       );
       setSearchedTrack({ ...response.data, index });
     } catch (error) {
-      toast.error('Failed to search track', { position: 'bottom-center' });
+      toast.error(error.response.data.message, { position: 'bottom-center' });
     }
   };
 
@@ -63,8 +63,9 @@ const HomePage = () => {
           },
         }
       );
+      toast.success('Successfully added to favorite', { position: 'bottom-center' });
     } catch (error) {
-      console.log(error);
+      toast.error('Failed to add to favorite', { position: 'bottom-center' });
     }
   };
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import { API_URL } from '../../constants/url';
@@ -19,7 +20,7 @@ const TopTrackList = () => {
         });
         setTopTracks(response.data.items);
       } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.message, { position: 'bottom-center' });
       }
     };
 
