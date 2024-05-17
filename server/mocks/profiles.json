@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Akmal Hisyam",
+    "gender": "male",
+    "phone": "08123456789",
+    "picture": "https://i.pravatar.cc/300",
+    "UserId": 1
+  },
+  {
+    "name": "Kazuha Nakamura",
+    "gender": "female",
+    "phone": "08129876543",
+    "picture": "https://i.pravatar.cc/300",
+    "UserId": 2
+  }
+]
