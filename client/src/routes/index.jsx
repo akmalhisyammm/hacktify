@@ -10,14 +10,6 @@ import EditProfilePage from '../views/EditProfilePage';
 
 const router = createBrowserRouter([
   {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
-    path: '/register',
-    element: <RegisterPage />,
-  },
-  {
     path: '/auth/spotify',
     loader: ({ request }) => {
       const url = new URL(request.url);
@@ -27,7 +19,21 @@ const router = createBrowserRouter([
     },
   },
   {
+    loader: () => (localStorage.getItem('default_access_token') ? redirect('/') : null),
+    children: [
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/register',
+        element: <RegisterPage />,
+      },
+    ],
+  },
+  {
     element: <BaseLayout />,
+    loader: () => (!localStorage.getItem('default_access_token') ? redirect('/login') : null),
     children: [
       {
         path: '/',
