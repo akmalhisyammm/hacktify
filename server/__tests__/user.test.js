@@ -67,10 +67,13 @@ describe('PUT /api/v1/users/me/:id', () => {
     expect(response.status).toBe(200);
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty('id', 1);
-    expect(response.body).toHaveProperty('name', profiles[1].name);
-    expect(response.body).toHaveProperty('gender', profiles[1].gender);
-    expect(response.body).toHaveProperty('phone', profiles[1].phone);
-    expect(response.body).toHaveProperty('picture', profiles[1].picture);
+    expect(response.body).toHaveProperty('email', users[0].email);
+    expect(response.body.Profile).toBeInstanceOf(Object);
+    expect(response.body.Profile).toHaveProperty('id', 1);
+    expect(response.body.Profile).toHaveProperty('name', profiles[1].name);
+    expect(response.body.Profile).toHaveProperty('gender', profiles[1].gender);
+    expect(response.body.Profile).toHaveProperty('phone', profiles[1].phone);
+    expect(response.body.Profile).toHaveProperty('picture', profiles[1].picture);
   });
 });
 

@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 
 import { Heading } from '../atoms';
 import { TopTrackItem } from '../molecules';
-import { API_URL } from '../../constants/url';
+import axios from '../../lib/axios';
 
 const TopTrackList = () => {
   const [topTracks, setTopTracks] = useState([]);
@@ -14,14 +13,14 @@ const TopTrackList = () => {
       try {
         if (!localStorage.getItem('spotify_access_token')) return;
 
-        const response = await axios.get(`${API_URL}/users/top/tracks`, {
+        const response = await axios.get('/users/top/tracks', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('spotify_access_token')}`,
           },
         });
         setTopTracks(response.data.items);
       } catch (error) {
-        toast.error(error.response.data.message, { position: 'bottom-center' });
+        toast.error(error.response.data.message);
       }
     };
 

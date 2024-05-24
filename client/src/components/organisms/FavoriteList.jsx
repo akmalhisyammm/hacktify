@@ -2,24 +2,23 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 
 import { Heading } from '../atoms';
 import { SpotifyPlayer } from '../molecules';
-import { API_URL } from '../../constants/url';
-import { fetchFavorites } from '../../features/favorites/favoritesSlice';
+import { deleteFavorite, fetchFavorites } from '../../features/favorites/favoritesSlice';
+import axios from '../../lib/axios';
 
 const FavoriteList = () => {
   const [searchedTrack, setSearchedTrack] = useState(null);
 
-  const { favorites, loading, error } = useSelector((state) => state.favorites);
+  const { data, loading } = useSelector((state) => state.favorites);
 
   const dispatch = useDispatch();
 
   const handleSearchTrack = async (track, index) => {
     try {
       const response = await axios.get(
-        `${API_URL}/tracks/search?q=${encodeURIComponent(`${track.name} - ${track.artist}`)}`,
+        `/tracks/search?q=${encodeURIComponent(`${track.name} - ${track.artist}`)}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('spotify_access_token')}`,
@@ -32,50 +31,20 @@ const FavoriteList = () => {
     }
   };
 
-  const handleRemoveFavorite = async (id) => {
-    try {
-      await axios.delete(`${API_URL}/favorites/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('default_access_token')}`,
-        },
-      });
-      dispatch(fetchFavorites());
-    } catch (error) {
-      toast.error(error.response.data.message, { position: 'bottom-center' });
-    }
-  };
-
   useEffect(() => {
     dispatch(fetchFavorites());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error.response.data.message, { position: 'bottom-center' });
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     toast.error(error.message);
+  //   }
+  // }, [error]);
 
   return (
     <section className="flex flex-col gap-4 my-4">
       <Heading>My Favorites</Heading>
-      {error ? (
-        <div role="alert" className="alert alert-error">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6 stroke-current shrink-0"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-            />
-          </svg>
-          <span>Failed to load favorites. Please try again later.</span>
-        </div>
-      ) : loading ? (
+      {loading ? (
         <div>
           <img src="/pikachu-loading.gif" alt="Pikachu loading" width={120} className="mx-auto" />
           <p className="font-bold text-center animate-pulse">Loading favorites...</p>
@@ -83,7 +52,7 @@ const FavoriteList = () => {
       ) : (
         <>
           {searchedTrack && <SpotifyPlayer trackId={searchedTrack.id} />}
-          {favorites.length ? (
+          {data.length ? (
             <>
               {!localStorage.getItem('spotify_access_token') && (
                 <div role="alert" className="alert alert-warning">
@@ -116,7 +85,7 @@ const FavoriteList = () => {
                   padding: searchedTrack && '1.5rem',
                 }}
               >
-                {favorites.map((favorite, index) => (
+                {data.map((favorite, index) => (
                   <div key={favorite.id} className="card glass">
                     <div className="card-body">
                       <h2 className="card-title">{favorite.name}</h2>
@@ -143,7 +112,7 @@ const FavoriteList = () => {
                         )}
                         <button
                           className="btn btn-error text-base-100"
-                          onClick={() => handleRemoveFavorite(favorite.id)}
+                          onClick={() => dispatch(deleteFavorite(favorite.id))}
                         >
                           Remove
                         </button>

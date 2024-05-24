@@ -2,9 +2,8 @@ import { GoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 
-import { API_URL } from '../../constants/url';
+import axios from '../../lib/axios';
 
 const LoginForm = () => {
   const [form, setForm] = useState({
@@ -16,17 +15,17 @@ const LoginForm = () => {
 
   const handleGoogleLogin = async (codeResponse) => {
     try {
-      const response = await axios.get(`${API_URL}/auth/google`, {
+      const response = await axios.get('/auth/google', {
         headers: {
           token: codeResponse.credential,
         },
       });
 
       localStorage.setItem('default_access_token', response.data.access_token);
-      toast.success('Successfully logged in', { position: 'bottom-center' });
+      toast.success('Successfully logged in');
       navigate('/');
     } catch (error) {
-      toast.error(error.response.data.message, { position: 'bottom-center' });
+      toast.error(error.response.data.message);
     }
   };
 
@@ -34,13 +33,13 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${API_URL}/auth/login`, form);
+      const response = await axios.post('/auth/login', form);
 
       localStorage.setItem('default_access_token', response.data.access_token);
-      toast.success('Successfully logged in', { position: 'bottom-center' });
+      toast.success('Successfully logged in');
       navigate('/');
     } catch (error) {
-      toast.error(error.response.data.message, { position: 'bottom-center' });
+      toast.error(error.response.data.message);
     }
   };
 
@@ -105,7 +104,7 @@ const LoginForm = () => {
       </p>
       <div className="divider">OR</div>
       <div className="flex justify-center">
-        <GoogleLogin onSuccess={handleGoogleLogin} onError={(error) => console.log(error)} />
+        <GoogleLogin onSuccess={handleGoogleLogin} />
       </div>
     </section>
   );

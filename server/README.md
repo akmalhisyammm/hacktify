@@ -1,4 +1,4 @@
-# Branded Things API Documentation
+# Hacktify API Documentation
 
 URL: https://hacktify-api.akmalhisyam.my.id/api/v1
 
@@ -525,5 +525,3 @@ To: https://accounts.spotify.com/authorize
   "moods": ["energetic", "dreamy", "upbeat"]
 }
 ```
-
-a5071ae5ef37a8ac

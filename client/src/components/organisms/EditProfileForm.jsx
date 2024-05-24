@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 
 import { Heading } from '../atoms';
-import { API_URL } from '../../constants/url';
+import { updateUser } from '../../features/user/userSlice';
 
 const EditProfileForm = () => {
   const [form, setForm] = useState({
@@ -17,22 +16,19 @@ const EditProfileForm = () => {
 
   const { user } = useSelector((state) => state.user);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await axios.put(`${API_URL}/users/me`, form, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('default_access_token')}`,
-        },
-      });
+      await dispatch(updateUser(form)).unwrap();
 
-      toast.success('Successfully updated profile', { position: 'bottom-center' });
+      toast.success('Successfully updated profile');
       navigate('/profile');
     } catch (error) {
-      toast.error(error.response.data.message, { position: 'bottom-center' });
+      toast.error(error.message);
     }
   };
 

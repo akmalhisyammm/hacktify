@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 
 import { Heading } from '../atoms';
 import { SpotifyPlayer } from '../molecules';
-import { API_URL } from '../../constants/url';
+import { addFavorite } from '../../features/favorites/favoritesSlice';
+import axios from '../../lib/axios';
 
 const TracksGenerator = () => {
   const [keyword, setKeyword] = useState('');
@@ -13,22 +14,22 @@ const TracksGenerator = () => {
   const [searchedTrack, setSearchedTrack] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleGenerateTracks = async () => {
     try {
       setIsLoading(true);
 
-      const response = await axios.get(
-        `${API_URL}/tracks/generate?q=${encodeURIComponent(keyword)}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('default_access_token')}`,
-          },
-        }
-      );
-      toast.success('Successfully generated tracks', { position: 'bottom-center' });
+      const response = await axios.get(`/tracks/generate?q=${encodeURIComponent(keyword)}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('default_access_token')}`,
+        },
+      });
+
+      toast.success('Successfully generated tracks');
       setGeneratedTracks(response.data.tracks);
     } catch (error) {
-      toast.error(error.response.data.message, { position: 'bottom-center' });
+      toast.error(error.response.data.message);
     } finally {
       setIsLoading(false);
     }
@@ -37,36 +38,27 @@ const TracksGenerator = () => {
   const handleSearchTrack = async (track, index) => {
     try {
       const response = await axios.get(
-        `${API_URL}/tracks/search?q=${encodeURIComponent(`${track.name} - ${track.artist}`)}`,
+        `/tracks/search?q=${encodeURIComponent(`${track.name} - ${track.artist}`)}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('spotify_access_token')}`,
           },
         }
       );
+
       setSearchedTrack({ ...response.data, index });
     } catch (error) {
-      toast.error(error.response.data.message, { position: 'bottom-center' });
+      toast.error(error.response.data.message);
     }
   };
 
   const handleAddFavorite = async (track) => {
     try {
-      await axios.post(
-        `${API_URL}/favorites`,
-        {
-          name: track.name,
-          artist: track.artist,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('default_access_token')}`,
-          },
-        }
-      );
-      toast.success('Successfully added to favorite', { position: 'bottom-center' });
+      await dispatch(addFavorite({ name: track.name, artist: track.artist })).unwrap();
+
+      toast.success('Successfully added to favorite');
     } catch (error) {
-      toast.error(error.response.data.message, { position: 'bottom-center' });
+      toast.error(error.message);
     }
   };
 

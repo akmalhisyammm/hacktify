@@ -1,49 +1,80 @@
-import { createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { asyncThunkCreator, buildCreateSlice } from '@reduxjs/toolkit';
 
-import { API_URL } from '../../constants/url';
+import axios from '../../lib/axios';
 
-const initialState = {
-  user: null,
-  loading: false,
-  error: null,
-};
-
-const userSlice = createSlice({
-  name: 'user',
-  initialState,
-  reducers: {
-    fetchUserStart(state) {
-      state.loading = true;
-      state.error = null;
-    },
-    fetchUserSuccess(state, action) {
-      state.user = action.payload;
-      state.loading = false;
-    },
-    fetchUserFailure(state, action) {
-      state.error = action.payload;
-      state.loading = false;
-    },
+const createAppSlice = buildCreateSlice({
+  creators: {
+    asyncThunk: asyncThunkCreator,
   },
 });
 
-export const { fetchUserStart, fetchUserSuccess, fetchUserFailure } = userSlice.actions;
-
-export const fetchUser = () => async (dispatch) => {
-  try {
-    dispatch(fetchUserStart());
-
-    const response = await axios.get(`${API_URL}/users/me`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('default_access_token')}`,
+const userSlice = createAppSlice({
+  name: 'user',
+  initialState: {
+    data: null,
+    loading: false,
+    error: null,
+  },
+  reducers: (create) => ({
+    fetchUser: create.asyncThunk(
+      async (_, thunkAPI) => {
+        try {
+          const response = await axios.get('/users/me', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('default_access_token')}`,
+            },
+          });
+          return thunkAPI.fulfillWithValue(response.data);
+        } catch (error) {
+          return thunkAPI.rejectWithValue(error.response.data);
+        }
       },
-    });
+      {
+        pending: (state) => {
+          state.loading = true;
+        },
+        fulfilled: (state, action) => {
+          state.data = action.payload;
+        },
+        rejected: (state, action) => {
+          state.error = action.payload ?? action.error;
+        },
+        settled: (state) => {
+          state.loading = false;
+        },
+      }
+    ),
+    updateUser: create.asyncThunk(
+      async (data, thunkAPI) => {
+        try {
+          const response = await axios.put('/user', data, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('default_access_token')}`,
+            },
+          });
+          return thunkAPI.fulfillWithValue(response.data);
+        } catch (error) {
+          return thunkAPI.rejectWithValue(error.response.data);
+        }
+      },
+      {
+        pending: (state) => {
+          state.loading = true;
+        },
+        fulfilled: (state, action) => {
+          state.data = action.payload;
+        },
+        rejected: (state, action) => {
+          state.error = action.payload ?? action.error;
+        },
+        settled: (state) => {
+          state.loading = false;
+        },
+      }
+    ),
+  }),
+});
 
-    dispatch(fetchUserSuccess(response.data));
-  } catch (error) {
-    dispatch(fetchUserFailure(error));
-  }
-};
+export const { fetchUser, updateUser } = userSlice.actions;
 
 export default userSlice.reducer;

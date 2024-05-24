@@ -14,6 +14,8 @@ class UserController {
         next({ status: 404, message: 'User not found' });
       }
 
+      delete user.dataValues.password;
+
       res.status(200).json(user);
     } catch (err) {
       next(err);
@@ -71,9 +73,11 @@ class UserController {
 
       await profile.update({ name, gender, picture, phone, UserId });
 
-      const updatedProfile = await Profile.findByPk(profile.id);
+      const user = await User.findByPk(UserId, { include: Profile });
 
-      res.status(200).json(updatedProfile);
+      delete user.dataValues.password;
+
+      res.status(200).json(user);
     } catch (err) {
       next(err);
     }

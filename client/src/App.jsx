@@ -1,16 +1,19 @@
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { Provider } from 'react-redux';
 
+import { store } from './app/store';
 import router from './routes';
-
-import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   return (
-    <>
-      <RouterProvider router={router} />
-      <ToastContainer />
-    </>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+        <ToastContainer position="bottom-center" />
+      </Provider>
+    </GoogleOAuthProvider>
   );
 };
 

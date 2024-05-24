@@ -23,7 +23,7 @@ beforeAll(async () => {
   }
 });
 
-/* ========== CREATE PRODUCT (POST) ========== */
+/* ========== CREATE FAVORITE (POST) ========== */
 describe('POST /api/v1/favorites', () => {
   it('Gagal menjalankan fitur karena belum login', async () => {
     const response = await request(app)
@@ -50,7 +50,7 @@ describe('POST /api/v1/favorites', () => {
     const response = await request(app)
       .post('/api/v1/favorites')
       .set('Authorization', `Bearer ${token}`)
-      .send();
+      .send({ name: '', artist: '' });
 
     expect(response.status).toBe(400);
     expect(response.body).toBeInstanceOf(Object);
@@ -111,7 +111,7 @@ describe('GET /api/v1/favorites', () => {
   });
 });
 
-/* ========== DELETE PRODUCT (DELETE) ========== */
+/* ========== DELETE FAVORITE (DELETE) ========== */
 describe('DELETE /api/v1/favorites/:id', () => {
   it('Gagal menjalankan fitur karena belum login', async () => {
     const response = await request(app).delete('/api/v1/favorites/1');

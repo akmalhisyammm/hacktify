@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 
 import { Heading } from '../atoms';
-import { API_URL } from '../../constants/url';
+import axios from '../../lib/axios';
 
 const MoodsGenerator = () => {
   const [generatedMoods, setGeneratedMoods] = useState([]);
@@ -15,15 +14,16 @@ const MoodsGenerator = () => {
 
       setIsLoading(true);
 
-      const response = await axios.get(`${API_URL}/users/moods/detect`, {
+      const response = await axios.get('/users/moods/detect', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('spotify_access_token')}`,
         },
       });
-      toast.success('Successfully generated moods', { position: 'bottom-center' });
+
       setGeneratedMoods(response.data.moods);
+      toast.success('Successfully generated moods');
     } catch (error) {
-      toast.error(error.response.data.message, { position: 'bottom-center' });
+      toast.error(error.response.data.message);
     } finally {
       setIsLoading(false);
     }

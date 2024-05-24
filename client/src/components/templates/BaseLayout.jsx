@@ -6,11 +6,9 @@ const BaseLayout = () => {
   return (
     <>
       <Header />
-
       <main className="max-w-screen-xl px-4 mx-auto">
         <Outlet />
       </main>
-
       <Footer />
     </>
   );

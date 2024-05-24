@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 
-import { API_URL } from '../../constants/url';
+import axios from '../../lib/axios';
 
 const RegisterForm = () => {
   const [form, setForm] = useState({
@@ -21,12 +20,12 @@ const RegisterForm = () => {
     e.preventDefault();
 
     try {
-      await axios.post(`${API_URL}/auth/register`, form);
+      await axios.post('/auth/register', form);
 
-      toast.success('Successfully registered', { position: 'bottom-center' });
+      toast.success('Successfully registered');
       navigate('/login');
     } catch (error) {
-      toast.error(error.response.data.message, { position: 'bottom-center' });
+      toast.error(error.response.data.message);
     }
   };
 
